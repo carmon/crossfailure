@@ -1,0 +1,11 @@
+{
+	"name": "crossfailure",
+	"url" : "http://hindenburgtitanic.com.ar",
+	"license": "MIT",
+	"tags": ["flash", "game", "cpp", "openfl", "cross", "neko", "android", "ios"],
+	"description": "CrossFailure is a 2D game framework built with OpenFL and Haxe that delivers cross platform games.",
+	"version": "0.0.1",
+	"releasenote": "Initial haxelib release",
+	"contributors": ["hindenburgtitanic"],
+	"dependencies": { "openfl": "" }
+}
