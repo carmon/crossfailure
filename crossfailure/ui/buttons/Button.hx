@@ -1,5 +1,6 @@
 package crossfailure.ui.buttons;
 
+import crossfailure.ui.sprites.AnimatedSprite;
 import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.events.EventDispatcher;
