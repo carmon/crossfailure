@@ -1,4 +1,4 @@
-package ui.pxBitmapFont;
+package crossfailure.ui.bitmaps.font;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -11,7 +11,7 @@ import ui.pxBitmapFont.BitmapFontBitmapFont;
  * Renders a text field.
  * @author Johan Peitz
  */
-class BitmapFontTextField extends Sprite 
+class BitmapFontTextField extends Sprite
 {
 	private var _font:BitmapFontBitmapFont;
 	private var _text:String;
@@ -25,44 +25,44 @@ class BitmapFontTextField extends Sprite
 	private var _backgroundColor:Int;
 	private var _alignment:Int;
 	private var _padding:Int;
-	
+
 	private var _lineSpacing:Int;
 	private var _letterSpacing:Int;
 	private var _fontScale:Float;
 	private var _autoUpperCase:Bool;
 	private var _wordWrap:Bool;
 	private var _fixedWidth:Bool;
-	
+
 	private var _numSpacesInTab:Int;
 	private var _tabSpaces:String;
-	
+
 	private var _pendingTextChange:Bool;
 	private var _fieldWidth:Int;
 	private var _multiLine:Bool;
-	
+
 	private var _alpha:Float;
-	
+
 	#if (flash || js)
 	public var bitmapData:BitmapData;
 	private var _bitmap:Bitmap;
-	
+
 	private var _preparedTextGlyphs:Array<BitmapData>;
 	private var _preparedShadowGlyphs:Array<BitmapData>;
 	private var _preparedOutlineGlyphs:Array<BitmapData>;
-	
+
 	private var _mtx:Matrix;
 	#else
 	private var _drawData:Array<Float>;
 	#end
-	
+
 	/**
 	 * Constructs a new text field component.
 	 * @param pFont	optional parameter for component's font prop
 	 */
-	public function new(?pFont:BitmapFontBitmapFont = null) 
+	public function new(?pFont:BitmapFontBitmapFont = null)
 	{
 		super();
-		
+
 		_text = "";
 		_color = 0x0;
 		_useColor = true;
@@ -77,7 +77,7 @@ class BitmapFontTextField extends Sprite
 		_pendingTextChange = false;
 		_fieldWidth = 1;
 		_multiLine = false;
-		
+
 		_lineSpacing = 0;
 		_letterSpacing = 0;
 		_fontScale = 1;
@@ -85,10 +85,10 @@ class BitmapFontTextField extends Sprite
 		_fixedWidth = true;
 		_wordWrap = true;
 		_alpha = 1;
-		
+
 		_numSpacesInTab = 4;
 		_tabSpaces = "    ";
-		
+
 		if (pFont == null)
 		{
 			if (BitmapFontBitmapFont.fetch("default") == null)
@@ -101,26 +101,26 @@ class BitmapFontTextField extends Sprite
 		{
 			_font = pFont;
 		}
-		
+
 		#if (flash || js)
 		updateGlyphs(true, _shadow, _outline);
 		bitmapData = new BitmapData(1, 1, true);
 		_bitmap = new Bitmap(bitmapData);
 		this.addChild(_bitmap);
-		
+
 		_mtx = new Matrix();
 		#else
 		_drawData = [];
 		#end
-		
+
 		_pendingTextChange = true;
 		update();
 	}
-	
+
 	/**
 	 * Clears all resources used.
 	 */
-	public function destroy():Void 
+	public function destroy():Void
 	{
 		_font = null;
 		#if (flash || js)
@@ -128,21 +128,21 @@ class BitmapFontTextField extends Sprite
 		_bitmap = null;
 		bitmapData.dispose();
 		bitmapData = null;
-		
+
 		clearPreparedGlyphs(_preparedTextGlyphs);
 		clearPreparedGlyphs(_preparedShadowGlyphs);
 		clearPreparedGlyphs(_preparedOutlineGlyphs);
-		
+
 		_mtx = null;
 		#end
 	}
-	
-	public var numSpacesInTab(get_numSpacesInTab, set_numSpacesInTab):Int;	
-	function get_numSpacesInTab():Int 
+
+	public var numSpacesInTab(get_numSpacesInTab, set_numSpacesInTab):Int;
+	function get_numSpacesInTab():Int
 	{
 		return _numSpacesInTab;
-	}	
-	function set_numSpacesInTab(value:Int):Int 
+	}
+	function set_numSpacesInTab(value:Int):Int
 	{
 		if (_numSpacesInTab != value && value > 0)
 		{
@@ -157,16 +157,16 @@ class BitmapFontTextField extends Sprite
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Text to display.
 	 */
-	public var text(get_text, set_text):String;	
+	public var text(get_text, set_text):String;
 	function get_text():String
 	{
 		return _text;
 	}
-	function set_text(pText:String):String 
+	function set_text(pText:String):String
 	{
 		if (pText != _text)
 		{
@@ -176,7 +176,7 @@ class BitmapFontTextField extends Sprite
 		}
 		return _text;
 	}
-	
+
 	public function drawText(?Graph:Graphics=null, ?X:Float = 0, ?Y:Float = 0):Void
 	{
 		updateBitmapData(Graph, X, Y);
@@ -189,17 +189,17 @@ class BitmapFontTextField extends Sprite
 		renderGraphics.endFill();
 		#end
 	}
-	
+
 	/**
 	 * Internal method for updating the view of the text component
 	 */
-	private function updateBitmapData(?Graph:Graphics = null, ?X:Float = 0, ?Y:Float = 0):Void 
+	private function updateBitmapData(?Graph:Graphics = null, ?X:Float = 0, ?Y:Float = 0):Void
 	{
 		if (_font == null)
 		{
 			return;
 		}
-		
+
 		var preparedText:String = (_autoUpperCase) ? _text.toUpperCase() : _text;
 		var calcFieldWidth:Int = _fieldWidth;
 		var rows:Array<String> = [];
@@ -209,10 +209,10 @@ class BitmapFontTextField extends Sprite
 		var fontHeight:Int = _font.getFontHeight();
 		#end
 		var alignment:Int = _alignment;
-		
+
 		// cut text into pices
 		var lineComplete:Bool;
-		
+
 		// get words
 		var lines:Array<String> = preparedText.split("\n");
 		var i:Int = -1;
@@ -221,11 +221,11 @@ class BitmapFontTextField extends Sprite
 		{
 			lines = [lines[0]];
 		}
-		
+
 		var wordLength:Int;
 		var word:String;
 		var tempStr:String;
-		while (++i < lines.length) 
+		while (++i < lines.length)
 		{
 			if (_fixedWidth)
 			{
@@ -239,24 +239,24 @@ class BitmapFontTextField extends Sprite
 				{
 					words = lines[i].split("\t").join(" \t ").split(" ");
 				}
-				
-				if (words.length > 0) 
+
+				if (words.length > 0)
 				{
 					var wordPos:Int = 0;
 					var txt:String = "";
-					while (!lineComplete) 
+					while (!lineComplete)
 					{
 						word = words[wordPos];
 						var changed:Bool = false;
 						var currentRow:String = txt + word;
-						
+
 						if (_wordWrap)
 						{
 							var prevWord:String = (wordPos > 0) ? words[wordPos - 1] : "";
 							var nextWord:String = (wordPos < words.length) ? words[wordPos + 1] : "";
 							if (prevWord != "\t") currentRow += " ";
-							
-							if (_font.getTextWidth(currentRow, _letterSpacing, _fontScale) > _fieldWidth) 
+
+							if (_font.getTextWidth(currentRow, _letterSpacing, _fontScale) > _fieldWidth)
 							{
 								if (txt == "")
 								{
@@ -266,7 +266,7 @@ class BitmapFontTextField extends Sprite
 								{
 									rows.push(txt.substr(0, txt.length - 1));
 								}
-								
+
 								txt = "";
 								if (_multiLine)
 								{
@@ -305,7 +305,7 @@ class BitmapFontTextField extends Sprite
 						}
 						else
 						{
-							if (_font.getTextWidth(currentRow, _letterSpacing, _fontScale) > _fieldWidth) 
+							if (_font.getTextWidth(currentRow, _letterSpacing, _fontScale) > _fieldWidth)
 							{
 								if (word != "")
 								{
@@ -315,7 +315,7 @@ class BitmapFontTextField extends Sprite
 									while (j < wordLength)
 									{
 										currentRow = txt + word.charAt(j);
-										if (_font.getTextWidth(currentRow, _letterSpacing, _fontScale) > _fieldWidth) 
+										if (_font.getTextWidth(currentRow, _letterSpacing, _fontScale) > _fieldWidth)
 										{
 											rows.push(txt.substr(0, txt.length - 1));
 											txt = "";
@@ -343,10 +343,10 @@ class BitmapFontTextField extends Sprite
 								wordPos++;
 							}
 						}
-						
-						if (wordPos >= words.length) 
+
+						if (wordPos >= words.length)
 						{
-							if (!changed) 
+							if (!changed)
 							{
 								calcFieldWidth = Math.floor(Math.max(calcFieldWidth, _font.getTextWidth(txt, _letterSpacing, _fontScale)));
 								rows.push(txt);
@@ -367,35 +367,35 @@ class BitmapFontTextField extends Sprite
 				rows.push(lineWithoutTabs);
 			}
 		}
-		
+
 		var finalWidth:Int = calcFieldWidth + _padding * 2 + (_outline ? 2 : 0);
 		#if (flash || js)
 		var finalHeight:Int = Math.floor(_padding * 2 + Math.max(1, (rows.length * fontHeight + (_shadow ? 1 : 0)) + (_outline ? 2 : 0))) + ((rows.length >= 1) ? _lineSpacing * (rows.length - 1) : 0);
 		#else
 		var finalHeight:Int = Math.floor(_padding * 2 + Math.max(1, (rows.length * fontHeight * _fontScale + (_shadow ? 1 : 0)) + (_outline ? 2 : 0))) + ((rows.length >= 1) ? _lineSpacing * (rows.length - 1) : 0);
 		#end
-		
+
 		#if (flash || js)
-		if (bitmapData != null) 
+		if (bitmapData != null)
 		{
-			if (finalWidth != bitmapData.width || finalHeight != bitmapData.height) 
+			if (finalWidth != bitmapData.width || finalHeight != bitmapData.height)
 			{
 				bitmapData.dispose();
 				bitmapData = null;
 			}
 		}
-		
-		if (bitmapData == null) 
+
+		if (bitmapData == null)
 		{
 			bitmapData = new BitmapData(finalWidth, finalHeight, !_background, _backgroundColor);
-		} 
-		else 
+		}
+		else
 		{
 			bitmapData.fillRect(bitmapData.rect, _backgroundColor);
 		}
 		#else
 		var renderGraphics:Graphics = (Graph != null) ? Graph : this.graphics;
-		
+
 		renderGraphics.clear();
 		if (_background == true)
 		{
@@ -405,21 +405,21 @@ class BitmapFontTextField extends Sprite
 		}
 		_drawData.splice(0, _drawData.length);
 		#end
-		
+
 		if (_fontScale > 0)
 		{
 			#if (flash || js)
 			bitmapData.lock();
 			#end
-			
+
 			// render text
 			var row:Int = 0;
-			
-			for (t in rows) 
+
+			for (t in rows)
 			{
 				var ox:Int = 0; // LEFT
 				var oy:Int = 0;
-				if (alignment == BitmapFontTextAlign.CENTER) 
+				if (alignment == BitmapFontTextAlign.CENTER)
 				{
 					if (_fixedWidth)
 					{
@@ -430,7 +430,7 @@ class BitmapFontTextField extends Sprite
 						ox = Math.floor((finalWidth - _font.getTextWidth(t, _letterSpacing, _fontScale)) / 2);
 					}
 				}
-				if (alignment == BitmapFontTextAlign.RIGHT) 
+				if (alignment == BitmapFontTextAlign.RIGHT)
 				{
 					if (_fixedWidth)
 					{
@@ -441,11 +441,11 @@ class BitmapFontTextField extends Sprite
 						ox = finalWidth - Math.floor(_font.getTextWidth(t, _letterSpacing, _fontScale)) - 2 * padding;
 					}
 				}
-				if (_outline) 
+				if (_outline)
 				{
-					for (py in 0...(2 + 1)) 
+					for (py in 0...(2 + 1))
 					{
-						for (px in 0...(2 + 1)) 
+						for (px in 0...(2 + 1))
 						{
 							#if (flash || js)
 							_font.render(bitmapData, _preparedOutlineGlyphs, t, _outlineColor, px + ox + _padding, py + row * (fontHeight + _lineSpacing) + _padding, _letterSpacing);
@@ -457,7 +457,7 @@ class BitmapFontTextField extends Sprite
 					ox += 1;
 					oy += 1;
 				}
-				if (_shadow) 
+				if (_shadow)
 				{
 					#if (flash || js)
 					_font.render(bitmapData, _preparedShadowGlyphs, t, _shadowColor, 1 + ox + _padding, 1 + oy + row * (fontHeight + _lineSpacing) + _padding, _letterSpacing);
@@ -472,23 +472,23 @@ class BitmapFontTextField extends Sprite
 				#end
 				row++;
 			}
-			
+
 			#if (flash || js)
 			bitmapData.unlock();
 			#else
 			_font.drawText(renderGraphics, _drawData);
 			#end
 		}
-		
+
 		_pendingTextChange = false;
 	}
-	
+
 	/**
 	 * Updates the bitmap data for the text field if any changes has been made.
 	 */
-	public function update():Void 
+	public function update():Void
 	{
-		if (_pendingTextChange) 
+		if (_pendingTextChange)
 		{
 			updateBitmapData();
 			#if (flash || js)
@@ -496,16 +496,16 @@ class BitmapFontTextField extends Sprite
 			#end
 		}
 	}
-	
+
 	/**
 	 * Specifies whether the text field should have a filled background.
 	 */
-	public var background(get_background, set_background):Bool;	
+	public var background(get_background, set_background):Bool;
 	function get_background():Bool
 	{
 		return _background;
-	}	
-	function set_background(value:Bool):Bool 
+	}
+	function set_background(value:Bool):Bool
 	{
 		if (_background != value)
 		{
@@ -515,15 +515,15 @@ class BitmapFontTextField extends Sprite
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Specifies the color of the text field background.
 	 */
-	public var backgroundColor(get_backgroundColor, set_backgroundColor):Int;	
+	public var backgroundColor(get_backgroundColor, set_backgroundColor):Int;
 	function get_backgroundColor():Int
 	{
 		return _backgroundColor;
-	}	
+	}
 	function set_backgroundColor(value:Int):Int
 	{
 		if (_backgroundColor != value)
@@ -537,15 +537,15 @@ class BitmapFontTextField extends Sprite
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Specifies whether the text should have a shadow.
 	 */
-	public var shadow(get_shadow, set_shadow):Bool;	
+	public var shadow(get_shadow, set_shadow):Bool;
 	function get_shadow():Bool
 	{
 		return _shadow;
-	}	
+	}
 	function set_shadow(value:Bool):Bool
 	{
 		if (_shadow != value)
@@ -556,19 +556,19 @@ class BitmapFontTextField extends Sprite
 			_pendingTextChange = true;
 			update();
 		}
-		
+
 		return value;
 	}
-	
+
 	/**
 	 * Specifies the color of the text field shadow.
 	 */
-	public var shadowColor(get_shadowColor, set_shadowColor):Int;	
+	public var shadowColor(get_shadowColor, set_shadowColor):Int;
 	function get_shadowColor():Int
 	{
 		return _shadowColor;
-	}	
-	function set_shadowColor(value:Int):Int 
+	}
+	function set_shadowColor(value:Int):Int
 	{
 		if (_shadowColor != value)
 		{
@@ -577,19 +577,19 @@ class BitmapFontTextField extends Sprite
 			_pendingTextChange = true;
 			update();
 		}
-		
+
 		return value;
 	}
-	
+
 	/**
 	 * Sets the padding of the text field. This is the distance between the text and the border of the background (if any).
 	 */
-	public var padding(get_padding, set_padding):Int;	
+	public var padding(get_padding, set_padding):Int;
 	function get_padding():Int
 	{
 		return _padding;
-	}	
-	function set_padding(value:Int):Int 
+	}
+	function set_padding(value:Int):Int
 	{
 		if (_padding != value)
 		{
@@ -599,16 +599,16 @@ class BitmapFontTextField extends Sprite
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Sets the color of the text.
 	 */
-	public var color(get_color, set_color):Int;	
+	public var color(get_color, set_color):Int;
 	function get_color():Int
 	{
 		return _color;
-	}	
-	function set_color(value:Int):Int 
+	}
+	function set_color(value:Int):Int
 	{
 		if (_color != value)
 		{
@@ -619,13 +619,13 @@ class BitmapFontTextField extends Sprite
 		}
 		return value;
 	}
-	
-	public var useColor(get_useColor, set_useColor):Bool;	
-	function get_useColor():Bool 
+
+	public var useColor(get_useColor, set_useColor):Bool;
+	function get_useColor():Bool
 	{
 		return _useColor;
-	}	
-	function set_useColor(value:Bool):Bool 
+	}
+	function set_useColor(value:Bool):Bool
 	{
 		if (_useColor != value)
 		{
@@ -636,13 +636,13 @@ class BitmapFontTextField extends Sprite
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Sets the width of the text field. If the text does not fit, it will spread on multiple lines.
 	 */
-	public function setWidth(pWidth:Int):Int 
+	public function setWidth(pWidth:Int):Int
 	{
-		if (pWidth < 1) 
+		if (pWidth < 1)
 		{
 			pWidth = 1;
 		}
@@ -652,20 +652,20 @@ class BitmapFontTextField extends Sprite
 			_pendingTextChange = true;
 			update();
 		}
-		
+
 		return pWidth;
 	}
-	
+
 	/**
 	 * Specifies how the text field should align text.
 	 * LEFT, RIGHT, CENTER.
 	 */
-	public var alignment(get_alignment, set_alignment):Int;	
+	public var alignment(get_alignment, set_alignment):Int;
 	function get_alignment():Int
 	{
 		return _alignment;
-	}	
-	function set_alignment(pAlignment:Int):Int 
+	}
+	function set_alignment(pAlignment:Int):Int
 	{
 		if (_alignment != pAlignment)
 		{
@@ -675,16 +675,16 @@ class BitmapFontTextField extends Sprite
 		}
 		return pAlignment;
 	}
-	
+
 	/**
 	 * Specifies whether the text field will break into multiple lines or not on overflow.
 	 */
-	public var multiLine(get_multiLine, set_multiLine):Bool;	
+	public var multiLine(get_multiLine, set_multiLine):Bool;
 	function get_multiLine():Bool
 	{
 		return _multiLine;
-	}	
-	function set_multiLine(pMultiLine:Bool):Bool 
+	}
+	function set_multiLine(pMultiLine:Bool):Bool
 	{
 		if (_multiLine != pMultiLine)
 		{
@@ -694,16 +694,16 @@ class BitmapFontTextField extends Sprite
 		}
 		return pMultiLine;
 	}
-	
+
 	/**
 	 * Specifies whether the text should have an outline.
 	 */
-	public var outline(get_outline, set_outline):Bool;	
+	public var outline(get_outline, set_outline):Bool;
 	function get_outline():Bool
 	{
 		return _outline;
-	}	
-	function set_outline(value:Bool):Bool 
+	}
+	function set_outline(value:Bool):Bool
 	{
 		if (_outline != value)
 		{
@@ -715,16 +715,16 @@ class BitmapFontTextField extends Sprite
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Specifies whether color of the text outline.
 	 */
-	public var outlineColor(get_outlineColor, set_outlineColor):Int;	
+	public var outlineColor(get_outlineColor, set_outlineColor):Int;
 	function get_outlineColor():Int
 	{
 		return _outlineColor;
-	}	
-	function set_outlineColor(value:Int):Int 
+	}
+	function set_outlineColor(value:Int):Int
 	{
 		if (_outlineColor != value)
 		{
@@ -735,16 +735,16 @@ class BitmapFontTextField extends Sprite
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Sets which font to use for rendering.
 	 */
-	public var font(get_font, set_font):BitmapFontBitmapFont;	
+	public var font(get_font, set_font):BitmapFontBitmapFont;
 	function get_font():BitmapFontBitmapFont
 	{
 		return _font;
-	}	
-	function set_font(pFont:BitmapFontBitmapFont):BitmapFontBitmapFont 
+	}
+	function set_font(pFont:BitmapFontBitmapFont):BitmapFontBitmapFont
 	{
 		if (_font != pFont)
 		{
@@ -755,15 +755,15 @@ class BitmapFontTextField extends Sprite
 		}
 		return pFont;
 	}
-	
+
 	/**
 	 * Sets the distance between lines
 	 */
-	public var lineSpacing(get_lineSpacing, set_lineSpacing):Int;	
+	public var lineSpacing(get_lineSpacing, set_lineSpacing):Int;
 	function get_lineSpacing():Int
 	{
 		return _lineSpacing;
-	}	
+	}
 	function set_lineSpacing(pSpacing:Int):Int
 	{
 		if (_lineSpacing != pSpacing)
@@ -774,7 +774,7 @@ class BitmapFontTextField extends Sprite
 		}
 		return pSpacing;
 	}
-	
+
 	public function setAlpha(pAlpha:Float):Float
 	{
 		_alpha = pAlpha;
@@ -786,20 +786,20 @@ class BitmapFontTextField extends Sprite
 		#end
 		return pAlpha;
 	}
-	
+
 	public function getAlpha():Float
 	{
 		return _alpha;
 	}
-	
+
 	/**
 	 * Sets the "font size" of the text
 	 */
-	public var fontScale(get_fontScale, set_fontScale):Float;	
+	public var fontScale(get_fontScale, set_fontScale):Float;
 	function get_fontScale():Float
 	{
 		return _fontScale;
-	}	
+	}
 	function set_fontScale(pScale:Float):Float
 	{
 		var tmp:Float = Math.abs(pScale);
@@ -812,12 +812,12 @@ class BitmapFontTextField extends Sprite
 		}
 		return pScale;
 	}
-	
-	public var letterSpacing(get_letterSpacing, set_letterSpacing):Int;	
+
+	public var letterSpacing(get_letterSpacing, set_letterSpacing):Int;
 	function get_letterSpacing():Int
 	{
 		return _letterSpacing;
-	}	
+	}
 	function set_letterSpacing(pSpacing:Int):Int
 	{
 		var tmp:Int = Math.floor(Math.abs(pSpacing));
@@ -829,13 +829,13 @@ class BitmapFontTextField extends Sprite
 		}
 		return _letterSpacing;
 	}
-	
-	public var autoUpperCase(get_autoUpperCase, set_autoUpperCase):Bool;	
-	function get_autoUpperCase():Bool 
+
+	public var autoUpperCase(get_autoUpperCase, set_autoUpperCase):Bool;
+	function get_autoUpperCase():Bool
 	{
 		return _autoUpperCase;
-	}	
-	function set_autoUpperCase(value:Bool):Bool 
+	}
+	function set_autoUpperCase(value:Bool):Bool
 	{
 		if (_autoUpperCase != value)
 		{
@@ -845,13 +845,13 @@ class BitmapFontTextField extends Sprite
 		}
 		return _autoUpperCase;
 	}
-	
-	public var wordWrap(get_wordWrap, set_wordWrap):Bool;	
-	function get_wordWrap():Bool 
+
+	public var wordWrap(get_wordWrap, set_wordWrap):Bool;
+	function get_wordWrap():Bool
 	{
 		return _wordWrap;
-	}	
-	function set_wordWrap(value:Bool):Bool 
+	}
+	function set_wordWrap(value:Bool):Bool
 	{
 		if (_wordWrap != value)
 		{
@@ -861,13 +861,13 @@ class BitmapFontTextField extends Sprite
 		}
 		return _wordWrap;
 	}
-	
-	public var fixedWidth(get_fixedWidth, set_fixedWidth):Bool;	
-	function get_fixedWidth():Bool 
+
+	public var fixedWidth(get_fixedWidth, set_fixedWidth):Bool;
+	function get_fixedWidth():Bool
 	{
 		return _fixedWidth;
-	}	
-	function set_fixedWidth(value:Bool):Bool 
+	}
+	function set_fixedWidth(value:Bool):Bool
 	{
 		if (_fixedWidth != value)
 		{
@@ -877,7 +877,7 @@ class BitmapFontTextField extends Sprite
 		}
 		return _fixedWidth;
 	}
-	
+
 	private function updateGlyphs(?textGlyphs:Bool = false, ?shadowGlyphs:Bool = false, ?outlineGlyphs:Bool = false):Void
 	{
 		#if (flash || js)
@@ -886,13 +886,13 @@ class BitmapFontTextField extends Sprite
 			clearPreparedGlyphs(_preparedTextGlyphs);
 			_preparedTextGlyphs = _font.getPreparedGlyphs(_fontScale, _color, _useColor);
 		}
-		
+
 		if (shadowGlyphs)
 		{
 			clearPreparedGlyphs(_preparedShadowGlyphs);
 			_preparedShadowGlyphs = _font.getPreparedGlyphs(_fontScale, _shadowColor);
 		}
-		
+
 		if (outlineGlyphs)
 		{
 			clearPreparedGlyphs(_preparedOutlineGlyphs);
@@ -900,7 +900,7 @@ class BitmapFontTextField extends Sprite
 		}
 		#end
 	}
-	
+
 	#if (flash || js)
 	private function clearPreparedGlyphs(pGlyphs:Array<BitmapData>):Void
 	{
