@@ -3,3 +3,7 @@ crossfailure CHANGELOG
 v.0.0.1
 ------------------------------
 * Initial haxelib release
+
+v.0.0.1b
+------------------------------
+* SampleProject added

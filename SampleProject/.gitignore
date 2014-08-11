@@ -1,0 +1,9 @@
+bin/android/bin/deps/
+bin/android/bin/gen/
+bin/android/bin/libs/
+bin/android/bin/res/
+bin/android/bin/src/
+bin/android/haxe/
+bin/android/obj/
+bin/flash/bin/
+bin/flash/haxe/
