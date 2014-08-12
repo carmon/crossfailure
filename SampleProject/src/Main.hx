@@ -3,6 +3,7 @@ package ;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
+import sample.SampleController;
 
 /**
  * ...
@@ -33,6 +34,8 @@ class Main extends Sprite
 		
 		// Assets:
 		// nme.Assets.getBitmapData("img/assetname.jpg");
+		var controller:SampleController = new SampleController(this);
+		controller.init();
 	}
 
 	/* SETUP */
