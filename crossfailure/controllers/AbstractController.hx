@@ -1,4 +1,5 @@
 package crossfailure.controllers;
+import crossfailure.signals.Signal0;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.events.EventDispatcher;

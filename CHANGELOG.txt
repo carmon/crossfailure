@@ -1,9 +1,11 @@
 crossfailure CHANGELOG
 
-v.0.0.1
+v.0.0.1 (2014)
 ------------------------------
+21/06
 * Initial haxelib release
-
-v.0.0.1b
-------------------------------
+11/08
 * SampleProject added
+15/08
+* Signals added
+* Replaced events arquitecture

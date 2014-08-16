@@ -1,21 +1,21 @@
 package crossfailure.controllers;
-import crossfailure.controllers.events.NavigationEvent;
-import flash.events.EventDispatcher;
+import crossfailure.signals.Signal1.Signal1;
 
 /**
  * ...
  * @author Carmon
  */
-class NavigationController extends EventDispatcher
+class NavigationController
 {
+	public var navigateTo(default, null):Signal1<String>;
 
 	public function new() 
-	{
-		super();
+	{		
+		navigateTo = new Signal1<String>();
 	}
 	
 	public function dispatchNavigateTo(target:String):Void
 	{
-		dispatchEvent(new NavigationEvent(NavigationEvent.NAVIGATE_TO, target));
+		navigateTo.dispatch(target);
 	}
 }

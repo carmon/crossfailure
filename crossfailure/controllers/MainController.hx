@@ -1,5 +1,4 @@
 package crossfailure.controllers;
-import crossfailure.controllers.events.NavigationEvent;
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
 import crossfailure.models.AbstractModel;
@@ -22,7 +21,7 @@ class MainController
 		
 		if (model != null) _model = model;
 		else _model = new AbstractModel();
-		_model.navigationController.addEventListener(NavigationEvent.NAVIGATE_TO, onNavigationEvent);
+		_model.navigationController.navigateTo.add(navigateToHandler);
 		
 		_sections = new Map();
 		_controllers = [];
@@ -46,17 +45,17 @@ class MainController
 		_sections[id] = controller;
 	}
 	
-	private function onNavigationEvent(e:NavigationEvent):Void
-	{		
+	private function navigateToHandler(target:String):Void
+	{
 		//Path de navegación, valores posibles: [id_sección] - [id_sección]/.../[id_subsección]/ - ..
-		_steps = e.data.split('/');		
+		_steps = target.split('/');		
 		for (i in 0..._steps.length) {
 			if (_steps[i] == '..') {
 				dettachCurrentSection();
 			} else {
 				attachNewSection(_steps[i]);
 			}
-		}		
+		}	
 	}
 	
 	private function attachNewSection(id:String):Void
