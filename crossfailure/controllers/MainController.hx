@@ -1,6 +1,7 @@
 package crossfailure.controllers;
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
+import flash.Lib;
 import crossfailure.models.AbstractModel;
 
 /**
@@ -14,6 +15,8 @@ class MainController
 	private var _sections		:Map<String, AbstractController>;		
 	private var _steps			:Array<String>;
 	private var _controllers	:Array<AbstractController>;
+	
+	private var _previousTime	:Float;
 			
 	public function new(doc:DisplayObjectContainer, ?model:Dynamic) 
 	{
@@ -30,13 +33,17 @@ class MainController
 	
 	public function init():Void
 	{
+		_previousTime = Lib.getTimer();
 		_doc.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 	
 	private function onEnterFrame(e:Event):Void
 	{
+		var temp:Float = _previousTime;
+		_previousTime = Lib.getTimer();
+		var frameTime:Float = (_previousTime - temp) / 1000;
 		if (_doc.numChildren > 0) {
-			_controllers[_controllers.length - 1].update();
+			_controllers[_controllers.length - 1].update(frameTime);
 		}
 	}
 	

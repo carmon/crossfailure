@@ -23,6 +23,9 @@ class AbstractController
 	}	
 	
 	private var _model			:AbstractModel;
+	
+	//Variable que puede usarse para alterar el tiempo del frame
+	public var timeAdjustment	:Float = 1;
 
 	public function new(model:AbstractModel) 
 	{		
@@ -36,9 +39,8 @@ class AbstractController
 		
 	}
 	
-	public function update():Void
+	public function update(frameTime:Float):Void
 	{
-		
 	}
 	
 	public function end():Void

@@ -4,7 +4,7 @@ package crossfailure.core;
  * ...
  * @author Carmon
  */
-class Component
+class NodeList
 {
 
 	public function new() 
@@ -12,8 +12,4 @@ class Component
 		
 	}
 	
-	public function dispose():Void
-	{
-		
-	}
 }

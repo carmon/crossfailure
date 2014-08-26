@@ -26,11 +26,10 @@ class GameSectionController extends AbstractController
 		_graphic.addChild(_character.sprite);
 	}
 	
-	override public function update():Void 
+	override public function update(tick:Float):Void 
 	{
 		//TODO: agregar keyinput
-		
-		super.update();
+		super.update(tick);
 		_character.update();
 	}
 }
