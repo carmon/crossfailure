@@ -9,6 +9,6 @@ class Node
 {
     public var entity:Entity;
 	
-    public var previous:TNode;
+    public var prev:TNode;
     public var next:TNode;
 }

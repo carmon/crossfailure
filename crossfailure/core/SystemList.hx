@@ -1,5 +1,5 @@
 package crossfailure.core;
-import crossfailure.utils.classes.ListIterator.ListIterator;
+import crossfailure.utils.classes.ListIterator;
 
 /**
  * ...
