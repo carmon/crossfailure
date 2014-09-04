@@ -1,5 +1,6 @@
 package crossfailure.utils.input;
 
+import flash.display.DisplayObject;
 import flash.events.KeyboardEvent;
 
 class Keyboard extends Input
@@ -70,7 +71,9 @@ class Keyboard extends Input
 	public var LEFT:Bool;
 	public var RIGHT:Bool;
 	
-	public function new() 
+	private var _displayObj	:DisplayObject;
+	
+	public function new(displayObj:DisplayObject) 
 	{
 		super();
 		//Letters
@@ -85,6 +88,8 @@ class Keyboard extends Input
 			AddKey(String.fromCharCode(letter), letter);
 		}
 		#end
+		
+		_displayObj = displayObj;
 		
 		//Numbers
 		AddKey("ZERO", 48);
@@ -131,7 +136,14 @@ class Keyboard extends Input
 		AddKey("TAB", 9);
 	}
 	
-	public function HandleKeyDown(freshEvent:KeyboardEvent):Void
+	override public function start():Void 
+	{
+		super.start();
+        _displayObj.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
+        _displayObj.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp);		
+	}
+	
+	private function handleKeyDown(freshEvent:KeyboardEvent):Void
 	{
 		var keyObject:Key = _map[freshEvent.keyCode];
 		if (keyObject == null)
@@ -147,7 +159,7 @@ class Keyboard extends Input
 		Reflect.setField(this, keyObject.Name, true);
 	}
 	
-	public function HandleKeyUp(freshEvent:KeyboardEvent):Void
+	private function handleKeyUp(freshEvent:KeyboardEvent):Void
 	{
 		var keyObject:Key = _map[freshEvent.keyCode];
 		if (keyObject == null)

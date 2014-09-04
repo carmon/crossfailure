@@ -7,12 +7,10 @@ Main structure is a Model-Controller framework.
 
 To install, execute from command line:
 	
-	-----------------------------------------------------------------------
-	- haxelib git crossfailure https://github.com/Carmon/crossfailure.git -
-	-----------------------------------------------------------------------
+	haxelib git crossfailure https://github.com/Carmon/crossfailure.git
 
-**Dependencies (not configured yet):**
+**Dependencies:**
 
-	*Entity-Component-System framework based on Ash-HaXe by Dan Korostelev (https://github.com/nadako/Ash-HaXe)
+*Ash-HaXe by Dan Korostelev (https://github.com/nadako/Ash-HaXe)
 
 Author: Emiliano Carmona (elcarmon@gmail.com)

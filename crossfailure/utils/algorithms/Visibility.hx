@@ -55,10 +55,10 @@ package crossfailure.utils.algorithms;
    https://github.com/polygonal/polygonal/blob/master/LICENSE
 */
 
-typedef Block = {x:Float, y:Float, r:Float};
-typedef Point = {x:Float, y:Float};
-typedef Segment = {p1:EndPoint, p2:EndPoint, d:Float};
-typedef EndPoint = {x:Float, y:Float, begin:Bool, segment:Segment, angle:Float, visualize:Bool};
+private typedef Block = {x:Float, y:Float, r:Float};
+private typedef Point = {x:Float, y:Float};
+private typedef Segment = {p1:EndPoint, p2:EndPoint, d:Float};
+private typedef EndPoint = {x:Float, y:Float, begin:Bool, segment:Segment, angle:Float, visualize:Bool};
 
 /* 2d visibility algorithm, for demo
    Usage:

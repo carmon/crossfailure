@@ -17,6 +17,11 @@ class Input
 		}
 	}
 	
+	public function start():Void
+	{
+		
+	}
+	
 	public function Update():Void
 	{
 		var i:Int = 0;
