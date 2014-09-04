@@ -9,3 +9,7 @@ v.0.0.1 (2014)
 15/08
 * Signals added
 * Replaced events arquitecture
+25/08
+* Ash-Haxe dependency added (https://github.com/nadako/Ash-HaXe)
+04/09
+* v0.0.1 complete with functioning SampleProject
