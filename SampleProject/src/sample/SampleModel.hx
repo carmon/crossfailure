@@ -10,7 +10,7 @@ import sample.sections.game.components.GameState;
 class SampleModel extends AbstractModel
 {
 	public static var GAME_WIDTH :Int = 800;
-	public static var GAME_HEIGHT :Int = 480;
+	public static var GAME_HEIGHT :Int = 600;
 	
 	public var width(get, never):Int;
 	private function get_width():Int
