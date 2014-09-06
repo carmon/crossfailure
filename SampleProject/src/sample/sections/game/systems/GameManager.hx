@@ -67,7 +67,7 @@ class GameManager extends System
 				}
 				else 
 				{
-					// game over
+					_model.goto("../end");
 				}
 			}
 			

@@ -82,7 +82,7 @@ class EntityCreator
 		.add(Display).withInstance(new Display(deathView))
 		.add(Animation).withInstance(new Animation(deathView));
 		
-		spaceship.add(new Spaceship(fsm)).add(new Position(300, 225, 0));
+		spaceship.add(new Spaceship(fsm)).add(new Position(SampleModel.GAME_WIDTH*0.5, SampleModel.GAME_HEIGHT*0.5, 0));
 		
 		fsm.changeState("playing");
 		_engine.addEntity(spaceship);
