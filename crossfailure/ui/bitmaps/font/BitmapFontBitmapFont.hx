@@ -1,15 +1,15 @@
 package crossfailure.ui.bitmaps.font;
 
-import flash.display.BitmapData;
-import flash.display.Graphics;
-import flash.geom.ColorTransform;
-import flash.geom.Matrix;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.display.BitmapData;
+import openfl.display.Graphics;
+import openfl.geom.ColorTransform;
+import openfl.geom.Matrix;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
-#if (cpp || neko)
+//#if (cpp || neko)
 import openfl.display.Tilesheet;
-#end
+//#end
 
 /**
  * Holds information and bitmap glpyhs for a bitmap font.
@@ -21,14 +21,15 @@ class BitmapFontBitmapFont
 
 	private static var ZERO_POINT:Point = new Point();
 
-	#if (flash || js)
+	/*#if (flash || js)
 	private var _glyphs:Array<BitmapData>;
 	#else
+	*/
 	private var _glyphs:Map<Int,BitmapFontFontSymbol>;
 	private var _num_letters:Int;
 	private var _tileSheet:Tilesheet;
 	private static var _flags = Tilesheet.TILE_SCALE | Tilesheet.TILE_ROTATION | Tilesheet.TILE_ALPHA | Tilesheet.TILE_RGB;
-	#end
+	//#end
 	private var _glyphString:String;
 	private var _maxHeight:Int;
 
@@ -48,14 +49,16 @@ class BitmapFontBitmapFont
 	{
 		_maxHeight = 0;
 		_point = new Point();
+		/*
 		#if (flash || js)
 		_matrix = new Matrix();
 		_colorTransform = new ColorTransform();
 		_glyphs = [];
 		#else
+		*/
 		_glyphs = new Map<Int,BitmapFontFontSymbol>();
 		_num_letters = 0;
-		#end
+		//#end
 	}
 
 	/**
@@ -75,24 +78,24 @@ class BitmapFontBitmapFont
 			var result:BitmapData = prepareBitmapData(pBitmapData, tileRects);
 			var currRect:Rectangle;
 
-			#if (cpp || neko)
+			//#if (cpp || neko)
 			_tileSheet = new Tilesheet(result);
-			#end
+			//#end
 
 			for (letterID in 0...(tileRects.length))
 			{
 				currRect = tileRects[letterID];
 
 				// create glyph
-				#if (flash || js)
+				/*#if (flash || js)
 				var bd:BitmapData = new BitmapData(Math.floor(currRect.width), Math.floor(currRect.height), true, 0x0);
 				bd.copyPixels(pBitmapData, currRect, ZERO_POINT, null, null, true);
 
 				// store glyph
 				setGlyph(_glyphString.charCodeAt(letterID), bd);
-				#else
+				#else*/
 				setGlyph(_glyphString.charCodeAt(letterID), currRect, letterID, 0, 0, Math.floor(currRect.width));
-				#end
+				//#end
 			}
 		}
 
@@ -119,9 +122,9 @@ class BitmapFontBitmapFont
 			var charCode:Int;
 			var charString:String;
 
-			#if (cpp || neko)
+			//#if (cpp || neko)
 			_tileSheet = new Tilesheet(pBitmapData);
-			#end
+			//#end
 
 			var chars:Xml = null;
 			for (node in pXMLData.elements())
@@ -167,7 +170,7 @@ class BitmapFontBitmapFont
 						}
 
 						// create glyph
-						#if (flash || js)
+						/*#if (flash || js)
 						bd = null;
 						if (charString != " " && charString != "")
 						{
@@ -181,7 +184,7 @@ class BitmapFontBitmapFont
 
 						// store glyph
 						setGlyph(charCode, bd);
-						#else
+						#else*/
 						if (charString != " " && charString != "")
 						{
 							setGlyph(charCode, rect, letterID, Math.floor(point.x), Math.floor(point.y), charWidth);
@@ -190,7 +193,7 @@ class BitmapFontBitmapFont
 						{
 							setGlyph(charCode, rect, letterID, Math.floor(point.x), 1, charWidth);
 						}
-						#end
+						//#end
 
 						letterID++;
 					}
@@ -208,11 +211,11 @@ class BitmapFontBitmapFont
 	{
 		dispose();
 		_maxHeight = 0;
-		#if (flash || js)
+		/*#if (flash || js)
 		_glyphs = [];
-		#else
+		#else*/
 		_glyphs = new Map<Int,BitmapFontFontSymbol>();
-		#end
+		//#end
 		_glyphString = "";
 	}
 
@@ -311,7 +314,7 @@ class BitmapFontBitmapFont
 		return resultBitmapData;
 	}
 
-	#if (flash || js)
+	/*#if (flash || js)
 	public function getPreparedGlyphs(pScale:Float, pColor:Int, ?pUseColorTransform:Bool = true):Array<BitmapData>
 	{
 		var result:Array<BitmapData> = [];
@@ -362,14 +365,14 @@ class BitmapFontBitmapFont
 
 		return result;
 	}
-	#end
+	#end*/
 
 	/**
 	 * Clears all resources used by the font.
 	 */
 	public function dispose():Void
 	{
-		#if (flash || js)
+		/*#if (flash || js)
 		var bd:BitmapData;
 		for (i in 0...(_glyphs.length))
 		{
@@ -379,18 +382,18 @@ class BitmapFontBitmapFont
 				_glyphs[i].dispose();
 			}
 		}
-		#else
+		#else*/
 		_tileSheet = null;
 		_num_letters = 0;
-		#end
+		//#end
 		_glyphs = null;
 	}
 
-	#if (flash || js)
+	/*#if (flash || js)
 	/**
 	 * Serializes font data to cryptic bit string.
 	 * @return	Cryptic string with font as bits.
-	 */
+	 *//*
 	public function getFontData():String
 	{
 		var output:String = "";
@@ -411,9 +414,9 @@ class BitmapFontBitmapFont
 		}
 		return output;
 	}
-	#end
+	#end*/
 
-	#if (flash || js)
+	/*#if (flash || js)
 	private function setGlyph(pCharID:Int, pBitmapData:BitmapData):Void
 	{
 		if (_glyphs[pCharID] != null)
@@ -428,7 +431,7 @@ class BitmapFontBitmapFont
 			_maxHeight = pBitmapData.height;
 		}
 	}
-	#else
+	#else*/
 	private function setGlyph(pCharID:Int, pRect:Rectangle, pGlyphID:Int, ?pOffsetX:Int = 0, ?pOffsetY:Int = 0, ?pAdvanceX:Int = 0):Void
 	{
 		_tileSheet.addTileRect(pRect);
@@ -447,7 +450,7 @@ class BitmapFontBitmapFont
 			_maxHeight = Math.floor(pRect.height) + pOffsetY;
 		}
 	}
-	#end
+	//#end
 
 	/**
 	 * Renders a string of text onto bitmap data using the font.
@@ -457,38 +460,38 @@ class BitmapFontBitmapFont
 	 * @param	pOffsetX	X position of thext output.
 	 * @param	pOffsetY	Y position of thext output.
 	 */
-	#if flash
+	/*#if flash
 	public function render(pBitmapData:BitmapData, pFontData:Array<BitmapData>, pText:String, pColor:UInt, pOffsetX:Float, pOffsetY:Float, pLetterSpacing:Int, ?pAngle:Float = 0):Void
 	#elseif js
 	public function render(pBitmapData:BitmapData, pFontData:Array<BitmapData>, pText:String, pColor:Int, pOffsetX:Float, pOffsetY:Float, pLetterSpacing:Int, ?pAngle:Float = 0):Void
-	#else
+	#else*/
 	public function render(drawData:Array<Float>, pText:String, pColor:Int, pAlpha:Float, pOffsetX:Float, pOffsetY:Float, pLetterSpacing:Int, pScale:Float, ?pAngle:Float = 0, ?pUseColorTransform:Bool = true):Void
-	#end
+	//#end
 	{
 		_point.x = pOffsetX;
 		_point.y = pOffsetY;
-		#if (flash || js)
+		/*#if (flash || js)
 		var glyph:BitmapData;
-		#else
+		#else*/
 		var glyph:BitmapFontFontSymbol;
 		var glyphWidth:Int;
-		#end
+		//#end
 
 		for (i in 0...(pText.length))
 		{
 			var charCode:Int = pText.charCodeAt(i);
-			#if (flash || js)
+			/*#if (flash || js)
 			glyph = pFontData[charCode];
 			if (glyph != null)
-			#else
+			#else*/
 			glyph = _glyphs.get(charCode);
 			if (_glyphs.exists(charCode))
-			#end
+			//#end
 			{
-				#if (flash || js)
+				/*#if (flash || js)
 				pBitmapData.copyPixels(glyph, glyph.rect, _point, null, null, true);
 				_point.x += glyph.width + pLetterSpacing;
-				#else
+				#else*/
 				glyphWidth = glyph.xadvance;
 				var red:Float = (pColor >> 16 & 0xFF) / 255;
 				var green:Float = (pColor >> 8 & 0xFF) / 255;
@@ -513,12 +516,12 @@ class BitmapFontBitmapFont
 				}
 				drawData.push(pAlpha);										// alpha
 				_point.x += glyphWidth * pScale + pLetterSpacing;
-				#end
+				//#end
 			}
 		}
 	}
 
-	#if (cpp || neko)
+	//#if (cpp || neko)
 	/**
 	 * Internal method for actually drawing text on cpp and neko targets
 	 * @param	graphics
@@ -528,7 +531,7 @@ class BitmapFontBitmapFont
 	{
 		_tileSheet.drawTiles(graphics, drawData, false, _flags);
 	}
-	#end
+	//#end
 
 	/**
 	 * Returns the width of a certain test string.
@@ -545,20 +548,20 @@ class BitmapFontBitmapFont
 		for (i in 0...(textLength))
 		{
 			var charCode:Int = pText.charCodeAt(i);
-			#if (flash || js)
+		/*	#if (flash || js)
 			var glyph:BitmapData = _glyphs[charCode];
 			if (glyph != null)
 			{
 
 				w += glyph.width;
 			}
-			#else
+			#else*/
 			if (_glyphs.exists(charCode))
 			{
 
 				w += _glyphs.get(charCode).xadvance;
 			}
-			#end
+		//	#end
 		}
 
 		w = Math.round(w * pFontScale);
@@ -588,11 +591,11 @@ class BitmapFontBitmapFont
 
 	public function get_numLetters():Int
 	{
-		#if (flash || js)
+		/*#if (flash || js)
 		return _glyphs.length;
-		#else
+		#else*/
 		return _num_letters;
-		#end
+	//	#end
 	}
 
 	/**

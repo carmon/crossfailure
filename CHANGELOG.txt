@@ -13,3 +13,9 @@ v.0.0.1 (2014)
 * Ash-Haxe dependency added (https://github.com/nadako/Ash-HaXe)
 04/09
 * v0.0.1 complete with functioning SampleProject
+
+
+v.0.0.2b (October 2014)
+------------------------------
+21/10
+General reestructuration - SuperComponents added

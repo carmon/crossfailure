@@ -1,11 +1,10 @@
 package crossfailure.ui.bitmaps.font;
 
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.Graphics;
-import flash.display.Sprite;
-import flash.geom.Matrix;
-import ui.pxBitmapFont.BitmapFontBitmapFont;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.Graphics;
+import openfl.display.Sprite;
+import openfl.geom.Matrix;
 
 /**
  * Renders a text field.
@@ -42,7 +41,7 @@ class BitmapFontTextField extends Sprite
 
 	private var _alpha:Float;
 
-	#if (flash || js)
+	/*#if (flash || js)
 	public var bitmapData:BitmapData;
 	private var _bitmap:Bitmap;
 
@@ -51,9 +50,9 @@ class BitmapFontTextField extends Sprite
 	private var _preparedOutlineGlyphs:Array<BitmapData>;
 
 	private var _mtx:Matrix;
-	#else
+	#else*/
 	private var _drawData:Array<Float>;
-	#end
+//	#end
 
 	/**
 	 * Constructs a new text field component.
@@ -101,7 +100,7 @@ class BitmapFontTextField extends Sprite
 		{
 			_font = pFont;
 		}
-
+/*
 		#if (flash || js)
 		updateGlyphs(true, _shadow, _outline);
 		bitmapData = new BitmapData(1, 1, true);
@@ -109,9 +108,9 @@ class BitmapFontTextField extends Sprite
 		this.addChild(_bitmap);
 
 		_mtx = new Matrix();
-		#else
+		#else*/
 		_drawData = [];
-		#end
+		//#end
 
 		_pendingTextChange = true;
 		update();
@@ -122,7 +121,7 @@ class BitmapFontTextField extends Sprite
 	 */
 	public function destroy():Void
 	{
-		_font = null;
+		_font = null;/*
 		#if (flash || js)
 		removeChild(_bitmap);
 		_bitmap = null;
@@ -134,7 +133,7 @@ class BitmapFontTextField extends Sprite
 		clearPreparedGlyphs(_preparedOutlineGlyphs);
 
 		_mtx = null;
-		#end
+		#end*/
 	}
 
 	public var numSpacesInTab(get_numSpacesInTab, set_numSpacesInTab):Int;
@@ -179,7 +178,7 @@ class BitmapFontTextField extends Sprite
 
 	public function drawText(?Graph:Graphics=null, ?X:Float = 0, ?Y:Float = 0):Void
 	{
-		updateBitmapData(Graph, X, Y);
+		updateBitmapData(Graph, X, Y);/*
 		#if (flash || js)
 		_mtx.identity();
 		_mtx.translate(X, Y);
@@ -187,7 +186,7 @@ class BitmapFontTextField extends Sprite
 		renderGraphics.beginBitmapFill(bitmapData, _mtx);
 		renderGraphics.drawRect(X, Y, bitmapData.width, bitmapData.height);
 		renderGraphics.endFill();
-		#end
+		#end*/
 	}
 
 	/**
@@ -369,12 +368,12 @@ class BitmapFontTextField extends Sprite
 		}
 
 		var finalWidth:Int = calcFieldWidth + _padding * 2 + (_outline ? 2 : 0);
-		#if (flash || js)
+		/*#if (flash || js)
 		var finalHeight:Int = Math.floor(_padding * 2 + Math.max(1, (rows.length * fontHeight + (_shadow ? 1 : 0)) + (_outline ? 2 : 0))) + ((rows.length >= 1) ? _lineSpacing * (rows.length - 1) : 0);
-		#else
+		#else*/
 		var finalHeight:Int = Math.floor(_padding * 2 + Math.max(1, (rows.length * fontHeight * _fontScale + (_shadow ? 1 : 0)) + (_outline ? 2 : 0))) + ((rows.length >= 1) ? _lineSpacing * (rows.length - 1) : 0);
-		#end
-
+		//#end
+/*
 		#if (flash || js)
 		if (bitmapData != null)
 		{
@@ -392,8 +391,8 @@ class BitmapFontTextField extends Sprite
 		else
 		{
 			bitmapData.fillRect(bitmapData.rect, _backgroundColor);
-		}
-		#else
+		}*/
+		//#else
 		var renderGraphics:Graphics = (Graph != null) ? Graph : this.graphics;
 
 		renderGraphics.clear();
@@ -404,13 +403,13 @@ class BitmapFontTextField extends Sprite
 			renderGraphics.endFill();
 		}
 		_drawData.splice(0, _drawData.length);
-		#end
+		//#/end
 
 		if (_fontScale > 0)
 		{
-			#if (flash || js)
+			/*#if (flash || js)
 			bitmapData.lock();
-			#end
+			#end*/
 
 			// render text
 			var row:Int = 0;
@@ -447,11 +446,11 @@ class BitmapFontTextField extends Sprite
 					{
 						for (px in 0...(2 + 1))
 						{
-							#if (flash || js)
+							/*#if (flash || js)
 							_font.render(bitmapData, _preparedOutlineGlyphs, t, _outlineColor, px + ox + _padding, py + row * (fontHeight + _lineSpacing) + _padding, _letterSpacing);
-							#else
+							#else*/
 							_font.render(_drawData, t, _outlineColor, _alpha, X + px + ox + _padding, Y + py + row * (Math.floor(fontHeight * _fontScale) + _lineSpacing) + _padding, _letterSpacing, _fontScale);
-							#end
+							//#end
 						}
 					}
 					ox += 1;
@@ -459,25 +458,25 @@ class BitmapFontTextField extends Sprite
 				}
 				if (_shadow)
 				{
-					#if (flash || js)
+				/*	#if (flash || js)
 					_font.render(bitmapData, _preparedShadowGlyphs, t, _shadowColor, 1 + ox + _padding, 1 + oy + row * (fontHeight + _lineSpacing) + _padding, _letterSpacing);
-					#else
+					#else*/
 					_font.render(_drawData, t, _shadowColor, _alpha, X + 1 + ox + _padding, Y + 1 + oy + row * (Math.floor(fontHeight * _fontScale) + _lineSpacing) + _padding, _letterSpacing, _fontScale);
-					#end
+				//	#end
 				}
-				#if (flash || js)
+				/*#if (flash || js)
 				_font.render(bitmapData, _preparedTextGlyphs, t, _color, ox + _padding, oy + row * (fontHeight + _lineSpacing) + _padding, _letterSpacing);
-				#else
+				#else*/
 				_font.render(_drawData, t, _color, _alpha, X + ox + _padding, Y + oy + row * (Math.floor(fontHeight * _fontScale) + _lineSpacing) + _padding, _letterSpacing, _fontScale, _useColor);
-				#end
+				//#end
 				row++;
 			}
 
-			#if (flash || js)
+			/*#if (flash || js)
 			bitmapData.unlock();
-			#else
+			#else*/
 			_font.drawText(renderGraphics, _drawData);
-			#end
+			//#end
 		}
 
 		_pendingTextChange = false;
@@ -491,9 +490,9 @@ class BitmapFontTextField extends Sprite
 		if (_pendingTextChange)
 		{
 			updateBitmapData();
-			#if (flash || js)
-			_bitmap.bitmapData = bitmapData;
-			#end
+			//#if (flash || js)
+			//_bitmap.bitmapData = bitmapData;
+			//#end
 		}
 	}
 
@@ -880,7 +879,7 @@ class BitmapFontTextField extends Sprite
 
 	private function updateGlyphs(?textGlyphs:Bool = false, ?shadowGlyphs:Bool = false, ?outlineGlyphs:Bool = false):Void
 	{
-		#if (flash || js)
+		/*#if (flash || js)
 		if (textGlyphs)
 		{
 			clearPreparedGlyphs(_preparedTextGlyphs);
@@ -898,10 +897,10 @@ class BitmapFontTextField extends Sprite
 			clearPreparedGlyphs(_preparedOutlineGlyphs);
 			_preparedOutlineGlyphs = _font.getPreparedGlyphs(_fontScale, _outlineColor);
 		}
-		#end
+		#end*/
 	}
 
-	#if (flash || js)
+	/*#if (flash || js)
 	private function clearPreparedGlyphs(pGlyphs:Array<BitmapData>):Void
 	{
 		if (pGlyphs != null)
@@ -917,5 +916,5 @@ class BitmapFontTextField extends Sprite
 		}
 	}
 	#end
-
+*/
 }
