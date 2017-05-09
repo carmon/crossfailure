@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/Carmon/crossfailure.png?label=ready&title=Ready)](https://waffle.io/Carmon/crossfailure)
 crossfailure
 ============
 
