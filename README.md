@@ -1,7 +1,9 @@
 crossfailure
 ============
 
-CrossFailure is a 2D game framework built with OpenFL and Haxe that delivers cross platform games.
+CrossFailure *was* a 2D game framework built with OpenFL and Haxe that delivers cross platform games.
+
+If you want to use it that way:
 
 Main structure is a Model-Controller framework.
 
@@ -13,4 +15,8 @@ To install, execute from command line:
 
 *Ash-HaXe by Dan Korostelev (https://github.com/nadako/Ash-HaXe)
 
-Author: Emiliano Carmona (elcarmon@gmail.com)
+_______________
+
+CrossFailure *will* be a 2D game framework built with nodejs and webgl.
+
+Stay tuned.
