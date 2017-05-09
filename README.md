@@ -1,5 +1,6 @@
 crossfailure
 ============
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Carmon/crossfailure?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 CrossFailure *was* a 2D game framework built with OpenFL and Haxe that delivers cross platform games.
 
